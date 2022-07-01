@@ -47,12 +47,88 @@ Or you can refer to my [Demo Game Sample](https://github.com/frankie-2nfro-com/D
 ### Game Scene
 GameScene class is screen of the game, you can create different screen of you game and jump to and fro as you game design. The class simply provides skeleton life cycle template to your child classes. Let's create a simple story board as (Home) -> (Playing) -> (GameOver).
 
+#### HomeScene (create a python file as home_scene.py)
+
 ```python
-(code here)
+from camera_game_engine import GameScene
+import cv2
+
+class HomeScene(GameScene):
+	def setup(self):
+		self.elements["KEY_FUNCTION"] = {"type":"text", "message":"Home: Press 'p' to play", "x":30, "y":690, "font":cv2.FONT_HERSHEY_TRIPLEX, "size":1, "color":(255, 255, 255), "thickness":2}
+			
+	def reset(self):
+		self.stage.setCapture(False) 
+
+	def keyInToggle(self, key):
+		if key & 0xFF == ord('p'):
+			self.stage.jumpScene("PLAYING")
+		elif key & 0xFF == ord('q'):			
+			self.stage.quit()
 ```
 
-### Webcam
-...
+#### PlayingScene (create a python file as playing_scene.py)
+
+```python
+from camera_game_engine import GameScene
+import cv2
+
+class PlayingScene(GameScene):
+	def setup(self):
+		self.elements["KEY_FUNCTION"] = {"type":"text", "message":"Press 'p' to finish", "x":30, "y":690, "font":cv2.FONT_HERSHEY_TRIPLEX, "size":1, "color":(255, 255, 255), "thickness":2}
+			
+	def reset(self):
+		self.stage.setCapture(True) 
+
+	def keyInToggle(self, key):
+		if key & 0xFF == ord('p'):
+			self.stage.jumpScene("GAMEOVER")
+```
+
+#### GameoverScene (create a python file as gameover_scene.py)
+
+```python
+from camera_game_engine import GameScene
+import cv2
+
+class GameoverScene(GameScene):
+	def setup(self):
+		self.elements["KEY_FUNCTION"] = {"type":"text", "message":"Game Over: Press 'p' to play again", "x":30, "y":690, "font":cv2.FONT_HERSHEY_TRIPLEX, "size":1, "color":(255, 255, 255), "thickness":2}
+			
+	def reset(self):
+		self.stage.setCapture(False) 
+
+	def keyInToggle(self, key):
+		if key & 0xFF == ord('p'):
+			self.stage.jumpScene("HOME")
+```
+
+#### Update the main program
+
+```python
+game_engine_path = os.path.abspath('../CameraGameEngine')
+sys.path.insert(1, game_engine_path)
+from camera_game_engine import CameraGameEngine
+
+from home_scene import HomeScene
+from playing_scene import PlayingScene
+from gameover_scene import GameoverScene
+
+class DemoGame(CameraGameEngine):
+	def setup(self):
+		self.registerScene("HOME", HomeScene(self))
+		self.registerScene("PLAYING", PlayingScene(self))
+		self.registerScene("GAMEOVER", GameoverScene(self))
+		self.initScene("HOME")
+
+if __name__ == '__main__':
+	DemoGame('Demo Game', 1)
+```
+
+And now you create a game layout with home scene, playing scene and game over scene. The code is pretty simple. Just run and have a look.
+
+## Elements
+(to be added)
 
 ## Future enhancement
 I will add more features to this game engine like physics engine, collision detection, augmented reality, sound effect and so on
