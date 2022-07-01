@@ -127,8 +127,93 @@ if __name__ == '__main__':
 
 And now you create a game layout with home scene, playing scene and game over scene. The code is pretty simple. Just run and have a look.
 
+#### Life Cycle
+The game engine will call function in scene based on the life cycle. So just put your code in the appropriate and you can construct you screen with interaction. Here is the situation and when those functions will be called:
+1) call setup() once when object created
+2) when entering the scene, call reset()
+3) call update() for each frame (so you can change elements for each frame)
+4) call afterRender() when frame rendering finished
+5) call keyInToggle() when key press detected
+6) call timeoutCallback() when define event expired
+
 ## Elements
-(to be added)
+For each game scene, there are elements. Actually, you already know them in the code above. like:
+
+```python
+self.elements["KEY_FUNCTION"] = {"type":"text", "message":"Home: Press 'p' to play", "x":30, "y":690, "font":cv2.FONT_HERSHEY_TRIPLEX, "size":1, "color":(255, 255, 255), "thickness":2}
+```
+
+You have to give a unique name for each element in each scene. If you need to update the element, you need this unique name to refer to the element. In the example above, "KEY_FUNCTION" is the unique name. 
+
+The game engine support several types of elements: 
+
+### text
+Text is simple. You need to add your element with "type":"text". Parameters is as follows:
+```
+message: Text content of the element (e.g. Home: Press 'p' to play)
+x: coordination of x
+y: coordination of y
+font: font type (please check with opencv)
+size: font size
+color: font color (format: (r,g,b)
+thickness: font thickness 
+animate: shake|jump 
+```
+
+### jpg
+
+You can try to add this line as first line of setup() in HomeScene: (Certainly, you need to create folder and add file to the directory)
+```python
+self.elements["BG"] = {"type":"jpg", "file":"./assets/images/intro_bg.jpg", "x":0, "y":0, "w":1280, "h":720}
+```
+And now you have a beautiful background in you home screen. 
+
+### png
+```
+self.elements["WIN_MARBLE_U1"] = { "type":"png","file":"./assets/images/marble.png", "x":10, "y":140, "w":80, "h":80}
+```
+
+### line
+```
+self.elements["LINE1"] = { "type":"line",  "x":100, "y":40, "x2":100, "y2":200, "color": (0, 0, 0), "thickness":3 }
+```
+
+### box
+```
+self.elements["O1_BOX"] = { "type":"box", "x":75, "y":20, "w":340, "h":520, "color": (0, 200, 0), "thickness":3 }
+```
+
+### rect 
+```
+self.elements["BOX_YNAME_BG"] = { "type":"rect", "x":100, "y":50, "x2":300, "y2":100, "color":(50,50,50) }
+```
+
+### mimage
+Sometime you will create some image on your game. And if you need to show in the game scene, you can use mimage. Example here:
+```
+hand = cv2.resize(hand, (160,160), interpolation = cv2.INTER_AREA)	# hand is part of the webcam captured picture
+self.elements["GESTURE"] = { "type":"mimage",  "x":1100, "y":550, "fimg":hand, "timg":self.stage.frame }
+```
+
+As a camara game engine, some element is for the captured video stream or still picture:
+
+### pip
+To show your capture video stream to somewhere of your screen, you can use this
+```
+self.elements["PIP"] = {"type":"pip", "x":100, "y":100, "w":480, "h":320}
+```
+
+### snapshot
+During the game playing, you can save the webcam video stream at a moment to create a snapshot.  
+```
+self.stage.takeSnapshot()
+```
+
+And then you can display the snapshot to the screen:
+```
+self.elements["PIP_SNAPSHOT"] = { "type":"snapshot", "x":100, "y":100, "w":480, "h":320 }
+```
+
 
 ## Future enhancement
 I will add more features to this game engine like physics engine, collision detection, augmented reality, sound effect and so on
