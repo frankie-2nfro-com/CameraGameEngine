@@ -106,6 +106,8 @@ class GameoverScene(GameScene):
 #### Update the main program
 
 ```python
+import os, sys
+
 game_engine_path = os.path.abspath('../CameraGameEngine')
 sys.path.insert(1, game_engine_path)
 from camera_game_engine import CameraGameEngine
