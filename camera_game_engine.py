@@ -22,7 +22,7 @@ class CameraGameEngine:
 		#self.lastFrameTime = 0			# for calculate frame per second
 		#self.fps = 0					# current fps
 
-		self.__stopCapture = False
+		self.__stopCapture = True
 		self.__terminateFlag = False
 		self.__timeoutList = []
 		self.__globalData = {}
@@ -91,6 +91,11 @@ class CameraGameEngine:
 
 
 	def __render(self):
+		# if no capture, should show a background
+		if self.__stopCapture:
+			screen_w, screen_h, dump = self.frame.shape
+			cv2.rectangle(self.frame, pt1=(0,0), pt2=(screen_h, screen_w), color=(0, 0, 0), thickness=-1)
+
 		#render add on content
 		for key in self.__content.keys():
 			element = self.__content[key]
@@ -147,7 +152,8 @@ class CameraGameEngine:
 		cv2.imshow(self.title, self.frame)
 
 	def __afterRender(self):
-		self.__scene[self.currentScene].afterRender()
+		if self.currentScene is not None:
+			self.__scene[self.currentScene].afterRender()
 
 	def takeSnapshot(self):
 		self.snapshot = self.originalFrame
