@@ -1,5 +1,9 @@
 # CameraGameEngine
-A simple webcam game engine developed in a [AiCore project](https://github.com/frankie-2nfro-com/ComputerVisionRockPaperScissors). And this repository is extracting the generic game engine into a separate project. 
+This is a simple webcam game engine developed in a [AiCore project](https://github.com/frankie-2nfro-com/ComputerVisionRockPaperScissors). And this repository is extracting the generic game engine into a separate project. 
+
+## Flappy Bird Example
+
+A flappy bird game controlled by hand gesture is using this game engine to develop. You can check details in [here](https://github.com/frankie-2nfro-com/VisionFlappyGame).
 
 ## How to use
 Clone this repository in the same level of your game repository. For example, your game directory is in /games/mygame1:
@@ -171,9 +175,22 @@ self.elements["BG"] = {"type":"jpg", "file":"./assets/images/intro_bg.jpg", "x":
 And now you have a beautiful background in you home screen. 
 
 ### png
-```
+```python
 self.elements["WIN_MARBLE_U1"] = { "type":"png","file":"./assets/images/marble.png", "x":10, "y":140, "w":80, "h":80}
 ```
+
+#### png options
+Example:
+```python
+self.elements["WIN_MARBLE_U1"] = { "type":"png","file":"./assets/images/marble.png", "x":10, "y":140, "w":80, "h":80, animate:"images", images_freq:3}
+```
+where:
+
+animate = "images"
+
+images_freq = 3
+
+This will loop to show marble.png & marble_a.png for each 3 frames
 
 ### line
 ```
