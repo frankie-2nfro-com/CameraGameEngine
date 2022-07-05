@@ -1,11 +1,13 @@
 import cv2
 from datetime import datetime, timedelta
-from render import showPng
-from render import showTextByThread, showLineByThread, showBoxByThread, showJpegByThread 
-from render import showRectangleByThread, showCaptureVideoByThread, showSnapshotByThread
 import numpy as np
 import random
 
+from render import showPng
+from render import showTextByThread, showLineByThread, showBoxByThread, showJpegByThread 
+from render import showRectangleByThread, showCaptureVideoByThread, showSnapshotByThread
+
+from sound import playBackgroundMusicByThread, playFxMusicByThread
 
 
 class CameraGameEngine:
@@ -29,6 +31,8 @@ class CameraGameEngine:
 		self.__scene = {}
 		self.__content = {}
 		self.__contentAnimationState = {}
+
+		self.__backgroundMusicPlayer = None
 
 		# define a video capture object
 		self.vid = cv2.VideoCapture(self.camera_id)
@@ -215,8 +219,13 @@ class CameraGameEngine:
 	def __setContent(self, elements):
 		self.__content = elements
 
-	def quit(self):
+
+	def quit(self):	
+		if self.__backgroundMusicPlayer is not None:
+			self.__backgroundMusicPlayer.terminate()
+	
 		self.__terminateFlag = True
+
 
 	def setCapture(self, isCap):
 		self.__stopCapture = not isCap
@@ -231,6 +240,12 @@ class CameraGameEngine:
 
 	def jumpScene(self, targetScene):
 		self.__setNextScene(targetScene)
+
+	def playBackgroundMusic(self, file):
+		self.__backgroundMusicPlayer = playBackgroundMusicByThread(file)
+
+	def playFxMusic(self, file):
+		playFxMusicByThread(file)
 
 	# Simple Animation Engine
 	def __animate(self, name, element):
