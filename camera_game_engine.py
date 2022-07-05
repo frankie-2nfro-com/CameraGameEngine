@@ -254,6 +254,26 @@ class CameraGameEngine:
 						val = val - 1;
 				y = y + val;
 				self.__contentAnimationState[name] = {"yDelta": val}
+			elif element["animate"]=="images":
+				freq = element["images_freq"]
+				if name not in self.__contentAnimationState: 
+					self.__contentAnimationState[name] = {"images_freq": 0}
+
+				val = self.__contentAnimationState[name]["images_freq"];
+
+				if val < 0:
+					element["file"] = element["file"].replace(".png", "_a.png")
+					val = val + 1
+				elif val < freq:
+					element["file"] = element["file"].replace("_a.png", ".png")
+					val = val + 1
+				else:
+					element["file"] = element["file"].replace(".png", "_a.png")
+					val = -freq
+
+				self.__contentAnimationState[name] = {"images_freq": val}
+
+
 
 		return x, y, width, height, alpha
 
